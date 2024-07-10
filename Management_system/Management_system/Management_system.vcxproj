@@ -134,6 +134,7 @@
   <ItemGroup>
     <ClInclude Include="Book.h" />
     <ClInclude Include="Library.h" />
+    <ClInclude Include="Person.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="book.txt" />
