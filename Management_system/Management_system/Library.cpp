@@ -46,10 +46,12 @@ void Library::Display_menu() {
     case 7:
         Reserve_book();
         save_to_file();
+        write_reservations();
         break;
     case 8:
         Cancel_reservation();
         save_to_file();
+        write_reservations();
         break;
     case 9:
         Display_reserved_books();
@@ -61,6 +63,7 @@ void Library::Display_menu() {
         break;
     }
 }
+
 
 void Library::read_from_file() {
     ifstream file(filename);
@@ -193,39 +196,121 @@ void Library::Find_book_by_genre() {
     }
 }
 
+void Library::read_reservations() {
+    ifstream res_file("person_reservation.txt");
+    if (res_file.is_open()) {
+        string book, name, surname, phone, status;
+        while (getline(res_file, book)) {
+            getline(res_file, name);
+            getline(res_file, surname);
+            getline(res_file, phone);
+            getline(res_file, status);
+            Reservation* temp = new Reservation[res_count + 1];
+            for (int i = 0; i < res_count; ++i) {
+                temp[i] = reservations[i];
+            }
+            temp[res_count] = Reservation(Person(name, surname, phone), book, status == "Active");
+            delete[] reservations;
+            reservations = temp;
+            res_count++;
+        }
+        res_file.close();
+    }
+}
+
+
+void Library::write_reservations() {
+    ofstream res_file("person_reservation.txt", ios::app); // Otwórz plik w trybie dodawania
+
+    if (res_file.is_open()) {
+        for (int i = 0; i < res_count; ++i) {
+            res_file << reservations[i].bookName << endl;
+            res_file << reservations[i].person.getName() << endl;
+            res_file << reservations[i].person.getSurname() << endl;
+            res_file << reservations[i].person.getPhone() << endl;
+            res_file << reservations[i].status << endl;
+        }
+        res_file.close();
+    }
+}
+
 void Library::Reserve_book() {
-    cout << "Enter the name of the book to reserved: ";
+    cout << "Enter the name of the book to reserve: ";
     string book;
     cin.ignore();
     getline(cin, book);
     for (int i = 0; i < capacity; ++i) {
         if (books[i]->getName() == book) {
+            if (books[i]->getReserved()) {
+                cout << "Book is already reserved." << endl;
+                return;
+            }
+
+            string name, surname, phone;
+            cout << "Enter your name: ";
+            getline(cin, name);
+            cout << "Enter your surname: ";
+            getline(cin, surname);
+            cout << "Enter your phone number: ";
+            getline(cin, phone);
+
+            Person person(name, surname, phone);
             books[i]->setReserved(true);
-            cout << "Reserved:" << books[i]->getName() << endl;
+            Reservation reservation(person, book);
+
+            Reservation* temp = new Reservation[res_count + 1];
+            for (int i = 0; i < res_count; ++i) {
+                temp[i] = reservations[i];
+            }
+            temp[res_count] = reservation;
+            delete[] reservations;
+            reservations = temp;
+            res_count++;
+
+            cout << "Reservation made for book: " << book << endl;
             break;
         }
     }
 }
+
 void Library::Cancel_reservation() {
-    cout << "Enter the name of the book to reserved: ";
+    cout << "Enter the name of the book to cancel reservation: ";
     string book;
     cin.ignore();
     getline(cin, book);
     for (int i = 0; i < capacity; ++i) {
         if (books[i]->getName() == book) {
+            if (!books[i]->getReserved()) {
+                cout << "Book is not reserved." << endl;
+                return;
+            }
             books[i]->setReserved(false);
-            cout << "Cancel reservation: " << books[i]->getName() << endl;
+            cout << "Reservation canceled for: " << books[i]->getName() << endl;
+
+            for (int i = 0; i < res_count; ++i) {
+                if (reservations[i].bookName == book && reservations[i].status == "Active") {
+                    reservations[i].status = "Cancelled";
+                    break;
+                }
+            }
             break;
         }
     }
 }
+
 
 void Library::Display_reserved_books() {
     for (int i = 0; i < capacity; ++i) {
         if (books[i]->getReserved()) {
             books[i]->Display();
+            for (int j = 0; j < res_count; ++j) {
+                if (reservations[j].bookName == books[i]->getName() && reservations[j].status == "Active") {
+                    cout << "Reserved by: " << reservations[j].person.getName() << " " << reservations[j].person.getSurname() << endl;
+                    cout << "Phone number: " << reservations[j].person.getPhone() << endl;
+                    break;
+                }
+            }
             cout << "---------------------------" << endl;
         }
     }
-
 }
