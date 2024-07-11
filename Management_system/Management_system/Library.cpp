@@ -47,12 +47,10 @@ void Library::Display_menu() {
     case 7:
         Reserve_book();
         save_to_file();
-        write_reservations();
         break;
     case 8:
         Cancel_reservation();
         save_to_file();
-        write_reservations();
         break;
     case 9:
         Display_reserved_books();
@@ -218,10 +216,8 @@ void Library::read_reservations() {
     }
 }
 
-
-void Library::write_reservations() {
-    ofstream res_file("person_reservation.txt", ios::app); // Otwórz plik w trybie dodawania
-
+void Library::write_reservations()  {
+    ofstream res_file("person_reservation.txt");
     if (res_file.is_open()) {
         for (int i = 0; i < res_count; ++i) {
             res_file << reservations[i].bookName << endl;
@@ -231,6 +227,9 @@ void Library::write_reservations() {
             res_file << reservations[i].status << endl;
         }
         res_file.close();
+    }
+    else {
+        cout << "Error: Could not open the file to write the reservations!" << endl;
     }
 }
 
@@ -259,19 +258,33 @@ void Library::Reserve_book() {
             Reservation reservation(person, book);
 
             Reservation* temp = new Reservation[res_count + 1];
-            for (int i = 0; i < res_count; ++i) {
-                temp[i] = reservations[i];
+            for (int j = 0; j < res_count; ++j) {
+                temp[j] = reservations[j];
             }
             temp[res_count] = reservation;
             delete[] reservations;
             reservations = temp;
             res_count++;
 
+            ofstream res_file("person_reservation.txt", ios::app); // Otwórz plik w trybie dodawania
+            if (res_file.is_open()) {
+                res_file << reservation.bookName << endl;
+                res_file << reservation.person.getName() << endl;
+                res_file << reservation.person.getSurname() << endl;
+                res_file << reservation.person.getPhone() << endl;
+                res_file << reservation.status << endl;
+                res_file.close();
+            }
+            else {
+                cout << "Error: Could not open the file to write the reservation!" << endl;
+            }
+
             cout << "Reservation made for book: " << book << endl;
             break;
         }
     }
 }
+
 
 void Library::Cancel_reservation() {
     cout << "Enter the name of the book to cancel reservation: ";
@@ -299,7 +312,9 @@ void Library::Cancel_reservation() {
 }
 
 
-void Library::Display_reserved_books() {
+
+void Library::Display_reserved_books()  {
+    read_reservations(); // Odczyt rezerwacji z pliku przed wyœwietleniem
     for (int i = 0; i < capacity; ++i) {
         if (books[i]->getReserved()) {
             books[i]->Display();
@@ -313,4 +328,4 @@ void Library::Display_reserved_books() {
             cout << "---------------------------" << endl;
         }
     }
-}
+    }
