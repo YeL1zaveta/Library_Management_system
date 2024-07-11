@@ -43,5 +43,8 @@
     <Text Include="book.txt">
       <Filter>Pliki nagłówkowe</Filter>
     </Text>
+    <Text Include="person_reservation.txt">
+      <Filter>Pliki nagłówkowe</Filter>
+    </Text>
   </ItemGroup>
 </Project>
