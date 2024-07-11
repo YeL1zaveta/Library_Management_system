@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "Book.h"
+#include "Reservation.h"
 
 using namespace std;
 
@@ -9,6 +10,8 @@ private:
     Book** books;
     int capacity;
     string filename;
+    Reservation* reservations;
+    int res_count;
 
 public:
     Library(const string& filename) : books(nullptr), capacity(0), filename(filename) {
@@ -32,4 +35,6 @@ public:
     void Reserve_book();
     void Cancel_reservation();
     void Display_reserved_books();
+    void read_reservations();
+    void write_reservations();
 };
