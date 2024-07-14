@@ -1,6 +1,7 @@
 # Library_Management_system
 C++
 ## Description:
+Library_Management_system is a console application that allows to manage the library.Users can add, delete,edit, find some books by genre/title, reserved books and display all books in the library.
 
 ## Usage: 
 After running the aplication,you will see the main menu,which allows to perfom various operation:
