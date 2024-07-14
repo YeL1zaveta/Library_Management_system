@@ -266,7 +266,7 @@ void Library::Reserve_book() {
             reservations = temp;
             res_count++;
 
-            ofstream res_file("person_reservation.txt", ios::app); // Otwórz plik w trybie dodawania
+            ofstream res_file("person_reservation.txt", ios::app); 
             if (res_file.is_open()) {
                 res_file << reservation.bookName << endl;
                 res_file << reservation.person.getName() << endl;
@@ -314,7 +314,7 @@ void Library::Cancel_reservation() {
 
 
 void Library::Display_reserved_books()  {
-    read_reservations(); // Odczyt rezerwacji z pliku przed wyœwietleniem
+    read_reservations(); 
     for (int i = 0; i < capacity; ++i) {
         if (books[i]->getReserved()) {
             books[i]->Display();

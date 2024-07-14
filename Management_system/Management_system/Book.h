@@ -18,7 +18,7 @@ public:
         number_of_pages = np;
         reserved = r;
     }
-    Book() : name_of_book(""), author(""), genre(""), year(0), number_of_pages(0), reserved(false) {} //default constructor 
+    Book() : name_of_book(""), author(""), genre(""), year(0), number_of_pages(0), reserved(false) {} 
 
     string getName() {
         return name_of_book;
