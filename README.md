@@ -18,3 +18,6 @@ Library Management System
 9. Display all reserved books:
 10. Exit
 
+Example of use:
+![image](https://github.com/user-attachments/assets/4fe20ef6-ff00-4319-8cda-836ad86fe733)
+
