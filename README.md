@@ -20,5 +20,8 @@ Library Management System
     
 
 Example of use:
-![image](https://github.com/user-attachments/assets/4fe20ef6-ff00-4319-8cda-836ad86fe733)
+![image](https://github.com/user-attachments/assets/4fe20ef6-ff00-4319-8cda-836ad86fe733) 
+
+![image](https://github.com/user-attachments/assets/40c39c0e-7fac-4a0c-ab01-dfe7ad1ecd1f)
+
 
